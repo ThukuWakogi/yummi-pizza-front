@@ -1,14 +1,24 @@
-import React from 'react';
-import Layout from './components/layout/Layout';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React from 'react'
+import clsx from 'clsx'
+import { makeStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Layout from './components/layout/Layout'
+
+const useStyles = makeStyles(theme => ({
+  app: {
+    height: '100%'
+  }
+}))
 
 function App() {
+  const classes = useStyles()
+
   return (
-    <div className="App">
+    <div className={clsx('App', classes.app)}>
       <CssBaseline />
       <Layout />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
