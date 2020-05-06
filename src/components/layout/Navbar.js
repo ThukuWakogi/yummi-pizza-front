@@ -4,6 +4,9 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import Badge from '@material-ui/core/Badge'
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import { AuthContext } from '../../contexts/AuthContext'
 import AuthDialog from './Dialogs/AuthDialog'
 
@@ -56,14 +59,12 @@ export default function Navbar() {
             <Typography variant="h6" className={classes.title}>
               Yummi Pizza
             </Typography>
-            <Button
-              color="inherit"
-              onClick={() => {
-                handleAuthDialogOpen('login')
-              }}
-            >
-              Login
-            </Button>
+            <IconButton>
+              <Badge badgeContent={4} color="secondary">
+                <ShoppingCartIcon style={{ color: '#ffffff' }}/>
+              </Badge>
+            </IconButton>
+            <Button color="inherit" onClick={() => handleAuthDialogOpen('login')}>Login</Button>
             <Button color="inherit" onClick={() => handleAuthDialogOpen('register')}>Register</Button>
           </Toolbar>
         </AppBar>

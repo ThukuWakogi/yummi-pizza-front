@@ -31,10 +31,10 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
         </DialogContentText>
         {
           authAction === 'login'
-            ? <TextField autoFocus margin="dense" name="email" label="email address" type="email" fullWidth />
+            ? <TextField autoFocus margin="dense" name="email" label="email" type="email" fullWidth />
             : <>
                 <TextField autoFocus margin="dense" name="name" label="name" type="email" fullWidth />
-                <TextField margin="dense" name="email" label="Email Address" type="email" fullWidth />
+                <TextField margin="dense" name="email" label="email" type="email" fullWidth />
               </>
             
         }
