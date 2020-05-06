@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import clsx from 'clsx'
+import { makeStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Layout from './components/layout/Layout'
+import AuthContextProvider from './contexts/AuthContext'
+
+const useStyles = makeStyles(theme => ({
+  app: {
+    height: '100%'
+  }
+}))
 
 function App() {
+  const classes = useStyles()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={clsx('App', classes.app)}>
+      <AuthContextProvider>
+        <CssBaseline />
+        <Layout />
+      </AuthContextProvider>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
