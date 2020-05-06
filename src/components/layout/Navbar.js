@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import Badge from '@material-ui/core/Badge'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import { AuthContext } from '../../contexts/AuthContext'
 import AuthDialog from './Dialogs/AuthDialog'
@@ -24,13 +25,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar() {
   const classes = useStyles()
-  const { isAuthenticated, authenticatedUser } = useContext(AuthContext)
-  // const [authDialogOpen, setAuthDialogOpen] = useState(false)
-  // const [refAuthAction, setRefAuthAction] = useState(null)
+  const { isAuthenticated, fetchAuthenticatedUser, initialUserLoad, logout } = useContext(AuthContext)
   const [authDialogData, setAuthDialogData] = useState({
     authDialogOpen: false,
     authAction: null
   })
+  useEffect(() => {
+    fetchAuthenticatedUser()
+  }, [fetchAuthenticatedUser])
 
   const handleAuthDialogOpen = authAction => {
     setAuthDialogData({
@@ -59,13 +61,23 @@ export default function Navbar() {
             <Typography variant="h6" className={classes.title}>
               Yummi Pizza
             </Typography>
-            <IconButton>
-              <Badge badgeContent={4} color="secondary">
-                <ShoppingCartIcon style={{ color: '#ffffff' }}/>
-              </Badge>
-            </IconButton>
-            <Button color="inherit" onClick={() => handleAuthDialogOpen('login')}>Login</Button>
-            <Button color="inherit" onClick={() => handleAuthDialogOpen('register')}>Register</Button>
+            {
+              initialUserLoad
+                ? isAuthenticated
+                  ? <>
+                      <IconButton>
+                        <Badge badgeContent={4} color="secondary">
+                          <ShoppingCartIcon style={{ color: '#ffffff' }}/>
+                        </Badge>
+                      </IconButton>
+                      <Button color="inherit" onClick={logout}>logout</Button>
+                    </>
+                  : <>
+                      <Button color="inherit" onClick={() => handleAuthDialogOpen('login')}>Login</Button>
+                      <Button color="inherit" onClick={() => handleAuthDialogOpen('register')}>Register</Button>
+                    </>
+                : <CircularProgress color="secondary" size={25}></CircularProgress>
+            }
           </Toolbar>
         </AppBar>
       </div>

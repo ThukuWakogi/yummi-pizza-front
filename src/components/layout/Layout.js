@@ -8,7 +8,8 @@ import OrderPage from '../pages/OrderPage'
 
 const useStyles = makeStyles(theme => ({
   container: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
+    height: '100%'
   }
 }))
 
