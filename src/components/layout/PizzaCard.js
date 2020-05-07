@@ -11,19 +11,24 @@ import pizzaClipArt from '../../images/pizza-clipart-2.png'
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
   },
   media: {
     height: 140,
   },
+  cardActionArea: {
+    marginBottom: 'auto'
+  }
 })
 
-const PizzaCard = () => {
+const PizzaCard = ({ pizza }) => {
   const classes = useStyles()
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea className={classes.cardActionArea}>
         <CardMedia
           className={classes.media}
           image={pizzaClipArt}
@@ -31,11 +36,10 @@ const PizzaCard = () => {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+            {pizza.name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+            {pizza.description}
           </Typography>
         </CardContent>
       </CardActionArea>
