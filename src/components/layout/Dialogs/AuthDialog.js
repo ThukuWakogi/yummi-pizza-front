@@ -14,12 +14,12 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import Link from '@material-ui/core/Link'
 import IconButton from '@material-ui/core/IconButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import { AuthContext } from '../../../contexts/AuthContext'
 
 const useStyles = makeStyles(theme => {
-  console.log(theme)
   return {
     link: {
       cursor: 'pointer'
@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => {
 
 const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogAction }) => {
   const classes = useStyles()
-  const { login, authErrors, setErrors, loggingIn } = useContext(AuthContext)
+  const { login, authErrors, setErrors, loggingIn, register, registering } = useContext(AuthContext)
   const [state, setState] = useState({
     name: '',
     email: '',
@@ -58,7 +58,6 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
     event.preventDefault()
 
     if (authAction === 'login') {
-      console.log('running action')
       login(
         state.email,
         state.password,
@@ -71,6 +70,27 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
           })
         ]
       )
+
+      return
+    }
+
+    if (authAction === 'register') {
+      register(
+        state.name,
+        state.email,
+        state.password,
+        [
+          handleToggle,
+          () => setState({
+            ...state,
+            name: '',
+            email: '',
+            password: ''
+          })
+        ]
+      )
+
+      return
     }
   }
 
@@ -103,14 +123,69 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
                   fullWidth
                   required
                   onChange={handleChange}
+                  error={
+                    authErrors
+                      ? authErrors.data.errors.email
+                        ? true
+                        : false
+                      : false
+                  }
+                  helperText={authErrors ? authErrors.data.errors.email : null}
+                  disabled={loggingIn || registering}
                 />
               : <>
-                  <TextField autoFocus margin="dense" name="name" label="name" type="email" fullWidth required/>
-                  <TextField margin="dense" name="email" label="email" type="email" fullWidth />
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    name="name"
+                    label="name"
+                    type="text"
+                    fullWidth
+                    required
+                    onChange={handleChange}
+                    error={
+                      authErrors
+                        ? authErrors.data.errors.name
+                          ? true
+                          : false
+                        : false
+                    }
+                    helperText={authErrors ? authErrors.data.errors.name : null}
+                    disabled={loggingIn || registering}
+                    />
+                  <TextField
+                    margin="dense"
+                    name="email"
+                    label="email"
+                    type="email"
+                    fullWidth
+                    required
+                    onChange={handleChange}
+                    error={
+                      authErrors
+                        ? authErrors.data.errors.email
+                          ? true
+                          : false
+                        : false
+                    }
+                    helperText={authErrors ? authErrors.data.errors.email : null}
+                    disabled={loggingIn || registering}
+                  />
                 </>
               
           }
-          <FormControl fullWidth required>
+          <FormControl
+            fullWidth
+            required
+            error={
+              authErrors
+                ? authErrors.data.errors.password
+                  ? true
+                  : false
+                : false
+            }
+            disabled={loggingIn || registering}
+          >
             <InputLabel htmlFor="password">password</InputLabel>
             <Input
               id="password"
@@ -129,13 +204,24 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
                 </InputAdornment>
                 }
             />
+            {
+              authErrors
+                ? <FormHelperText className={classes.errorWarning}>
+                    {authErrors.data.errors.password}
+                  </FormHelperText>
+                : null
+            }
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setErrors(null, [handleToggle])} color="primary" disabled={loggingIn}>
+          <Button
+            onClick={() => setErrors(null, [handleToggle])}
+            color="primary"
+            disabled={loggingIn || registering}
+          >
             Cancel
           </Button>
-          <Button variant="contained" color="primary" type="submit" disabled={loggingIn}>
+          <Button variant="contained" color="primary" type="submit" disabled={loggingIn || registering}>
             {authAction}
           </Button>
         </DialogActions>
@@ -145,7 +231,7 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
             ? <DialogContentText>
                 {`Don't have an account? `}
                 <Link
-                  onClick={event => handleDialogAction(event, 'register')}
+                  onClick={event => handleDialogAction(event, 'register', setErrors(null))}
                   className={classes.link}
                 >
                   Register
@@ -154,7 +240,7 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
             : <DialogContentText>
                 {`Have an account? `}
                 <Link
-                  onClick={event => handleDialogAction(event, 'login')}
+                  onClick={event => handleDialogAction(event, 'login', setErrors(null))}
                   className={classes.link}
                 >
                   Login
@@ -164,7 +250,7 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
         </DialogContent>
       </form>
       {
-        loggingIn ? <LinearProgress /> : null
+        loggingIn || registering ? <LinearProgress /> : null
       }
     </Dialog>
   )

@@ -22,7 +22,6 @@ class AuthContextProvider extends Component {
     axios
       .post('/login', { email, password })
       .then(res => {
-        console.log({res})
         localStorage.setItem(this.state.localStorageTokenKey, res.data.access_token)
         this.setState({
           ...this.state,
@@ -30,14 +29,39 @@ class AuthContextProvider extends Component {
           loggingIn: false
         })
         this.handleCallbacks(callbacks)
+        this.fetchAuthenticatedUser()
       })
       .catch(err => {
-        console.log({err})
-        console.log(err.response)
         this.setState({
           ...this.state,
           authErrors: err.response,
           loggingIn: false
+        })
+      })
+  }
+
+  register = (name, email, password, callbacks) => {
+    this.setState({
+      ...this.state,
+      registering: true
+    })
+    axios
+      .post('/register', { name, email, password })
+      .then(res => {
+        localStorage.setItem(this.state.localStorageTokenKey, res.data.access_token)
+        this.setState({
+          ...this.state,
+          isAuthenticated: true,
+          registering: false
+        })
+        this.handleCallbacks(callbacks)
+        this.fetchAuthenticatedUser()
+      })
+      .catch(err => {
+        this.setState({
+          ...this.state,
+          authErrors: err.response,
+          registering: false
         })
       })
   }
@@ -53,7 +77,6 @@ class AuthContextProvider extends Component {
         }
       )
       .then(res => {
-        console.log({res})
         this.setState({
           ...this.state,
           authenticatedUser: res.data,
@@ -62,7 +85,6 @@ class AuthContextProvider extends Component {
         })
       })
       .catch(err => {
-        console.log({err})
         this.setState({
           ...this.state,
           initialUserLoad: true
@@ -109,7 +131,8 @@ class AuthContextProvider extends Component {
           login: this.login,
           fetchAuthenticatedUser: this.fetchAuthenticatedUser,
           setErrors: this.setErrors,
-          logout: this.logout
+          logout: this.logout,
+          register: this.register
         }}
       >
         {this.props.children}
