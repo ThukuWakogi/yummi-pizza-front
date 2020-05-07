@@ -48,9 +48,14 @@ export default function Navbar() {
     })
   }
 
-  const handleAuthDialogAction = (event, authAction) => {
+  const handleAuthDialogAction = (event, authAction, callbacks) => {
     event.preventDefault()
     setAuthDialogData({ ...authDialogData, authAction })
+    handleCallbacks(callbacks)
+  }
+
+  const handleCallbacks = (callbacks) => {
+    if (Array.isArray(callbacks)) callbacks.forEach(callback => callback())
   }
 
   return (
