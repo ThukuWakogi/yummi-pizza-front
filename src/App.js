@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Layout from './components/layout/Layout'
 import AuthContextProvider from './contexts/AuthContext'
+import PizzasContextProvider from './contexts/PizzasContext'
+import ShoppingCartContextProvider from './contexts/ShoppingCartContext'
 
 const useStyles = makeStyles(theme => ({
   app: {
@@ -17,8 +19,12 @@ function App() {
   return (
     <div className={clsx('App', classes.app)}>
       <AuthContextProvider>
-        <CssBaseline />
-        <Layout />
+        <PizzasContextProvider>
+          <ShoppingCartContextProvider>
+            <CssBaseline />
+            <Layout />
+          </ShoppingCartContextProvider>
+        </PizzasContextProvider>
       </AuthContextProvider>
     </div>
   )

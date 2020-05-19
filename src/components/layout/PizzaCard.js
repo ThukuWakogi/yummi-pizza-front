@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
@@ -8,39 +8,57 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import pizzaClipArt from '../../images/pizza-clipart-2.png'
+import { AuthContext } from '../../contexts/AuthContext'
+import { ShoppingCartContext } from '../../contexts/ShoppingCartContext'
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
   },
   media: {
     height: 140,
   },
+  cardActionArea: {
+    marginBottom: 'auto'
+  }
 })
 
-const PizzaCard = () => {
+const PizzaCard = ({ pizza, handlePizzaSelection }) => {
   const classes = useStyles()
+  const { isAuthenticated, handleAuthDialogOpen } = useContext(AuthContext)
+  const { setItemToShoppingCart } = useContext(ShoppingCartContext)
+
+  const handleAddToCart = () => {
+    handlePizzaSelection(pizza)
+    isAuthenticated
+      ? setItemToShoppingCart()
+      : handleAuthDialogOpen('login', [setItemToShoppingCart])
+  }
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea className={classes.cardActionArea}>
         <CardMedia
           className={classes.media}
           image={pizzaClipArt}
           title="Contemplative Reptile"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+          <Typography gutterBottom variant="h5">
+            {pizza.name}
+          </Typography>
+          <Typography variant="body1" color="textSecondary" component="p" gutterBottom>
+            {pizza.description}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+            ${pizza.price} / £{(pizza.price * 0.91).toFixed(2)}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={handleAddToCart}>
           Add to Cart
         </Button>
       </CardActions>
