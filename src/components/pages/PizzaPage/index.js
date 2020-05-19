@@ -4,14 +4,19 @@ import Typography from '@material-ui/core/Typography'
 import PizzaCard from '../../layout/PizzaCard'
 import { AuthContext } from '../../../contexts/AuthContext'
 import { PizzasContext } from '../../../contexts/PizzasContext'
+import { ShoppingCartContext } from '../../../contexts/ShoppingCartContext'
 import ProgressComponent from '../../layout/ProgressComponent'
+import AddToCartDialog from '../../../components/layout/Dialogs/AddToCartDialog'
 
 const PizzaPage = () => {
   const [state, setState] = useState({
-    pizzas: null
+    pizzas: null,
+    addToCartDialogOpen: false,
+    selectedPizza: {}
   })
   const { initialUserLoad, authenticatedUser } = useContext(AuthContext)
   const { getPizzas } = useContext(PizzasContext)
+  const { addToCartDialogOpen, handleAddToCartDialogToggle } = useContext(ShoppingCartContext)
   useEffect(() => {
     document.title = 'Yummi Pizza - Pizzas!'
     async function fetchPizzas() {
@@ -23,7 +28,13 @@ const PizzaPage = () => {
     fetchPizzas()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log(state)
+
+  const handlePizzaSelection = pizza => {
+    setState({
+      ...state,
+      selectedPizza: pizza
+    })
+  }
 
   return (
     <>
@@ -37,15 +48,22 @@ const PizzaPage = () => {
               }
               {
                 state.pizzas
-                  ? <Grid container direction="row" justify="center" spacing={2} alignItems="stretch">
-                      {
-                        state.pizzas.map(pizza => (
-                          <Grid key={pizza.id} xs={12} sm={4} md={3} item>
-                            <PizzaCard pizza={pizza}/>
-                          </Grid>
-                        ))
-                      }
-                    </Grid>
+                  ? <>
+                      <Grid container direction="row" justify="center" spacing={2} alignItems="stretch">
+                        {
+                          state.pizzas.map(pizza => (
+                            <Grid key={pizza.id} xs={12} sm={4} md={3} item>
+                              <PizzaCard pizza={pizza} handlePizzaSelection={handlePizzaSelection}/>
+                            </Grid>
+                          ))
+                        }
+                      </Grid>
+                      <AddToCartDialog
+                        open={addToCartDialogOpen}
+                        handleToggle={handleAddToCartDialogToggle}
+                        pizza={state.selectedPizza}
+                      />
+                    </>
                   : <ProgressComponent message="getting pizzas" />
               }
             </>
