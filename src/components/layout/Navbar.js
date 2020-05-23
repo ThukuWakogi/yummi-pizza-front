@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function Navbar() {
+export default function Navbar({ shoppingCartDialogToggle }) {
   const classes = useStyles()
   const {
     isAuthenticated,
@@ -48,7 +48,7 @@ export default function Navbar() {
               initialUserLoad
                 ? isAuthenticated
                   ? <>
-                      <IconButton>
+                      <IconButton onClick={shoppingCartDialogToggle}>
                         <Badge
                           badgeContent={
                             authenticatedUser ? authenticatedUser.shoppingCart.length : 0
