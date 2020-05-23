@@ -1,13 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { Container } from '@material-ui/core'
 import NavBar from './Navbar.js'
-import PizzaPage from '../pages/PizzaPage'
-import OrderPage from '../pages/OrderPage'
+import PizzaPage from '../pages/PizzaPage/PizzaPage'
+import OrderPage from '../pages/OrderPage/OrderPage'
 import AuthDialog from './Dialogs/AuthDialog'
 import ShoppingCartDialog from './Dialogs/ShoppingCartDialog'
 import { AuthContext } from '../../contexts/AuthContext'
+import ProgressComponent from './ProgressComponent'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,7 +22,14 @@ const Layout = () => {
   const [state, setState] = useState({
     shoppingCartDialog: false
   })
-  const { authDialogOpen, handleAuthDialogToggle, authAction, handleAuthDialogAction } = useContext(AuthContext)
+  const {
+    authDialogOpen,
+    handleAuthDialogToggle,
+    authAction,
+    handleAuthDialogAction,
+    fetchAuthenticatedUser,
+    initialUserLoad
+  } = useContext(AuthContext)
 
   const handleToggle = () => {
     setState({
@@ -29,14 +37,22 @@ const Layout = () => {
     })
   }
 
+  useEffect(() => {
+    fetchAuthenticatedUser()
+  }, [fetchAuthenticatedUser])
+
   return (
     <BrowserRouter>
       <NavBar shoppingCartDialogToggle={handleToggle}/>
       <Container className={classes.container}>
-        <Switch>
-          <Route exact path="/" component={PizzaPage}/>
-          <Route path="/order" component={OrderPage}/>
-        </Switch>
+        {
+          initialUserLoad
+            ? <Switch>
+                <Route exact path="/" component={PizzaPage}/>
+                <Route path="/order" component={OrderPage}/>
+              </Switch>
+            : <ProgressComponent />
+        }
       </Container>
       <AuthDialog
         authDialogOpen={authDialogOpen}

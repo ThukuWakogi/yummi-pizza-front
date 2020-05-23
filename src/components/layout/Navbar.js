@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -19,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    color: 'white',
+    textDecoration: 'none'
   },
 }))
 
@@ -26,22 +29,19 @@ export default function Navbar({ shoppingCartDialogToggle }) {
   const classes = useStyles()
   const {
     isAuthenticated,
-    fetchAuthenticatedUser,
+    //fetchAuthenticatedUser,
     initialUserLoad,
     logout,
     handleAuthDialogOpen,
     authenticatedUser
   } = useContext(AuthContext)
-  useEffect(() => {
-    fetchAuthenticatedUser()
-  }, [fetchAuthenticatedUser])
 
   return (
     <>
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6" className={classes.title}>
+            <Typography variant="h6" className={classes.title} component={Link} to="/">
               Yummi Pizza
             </Typography>
             {

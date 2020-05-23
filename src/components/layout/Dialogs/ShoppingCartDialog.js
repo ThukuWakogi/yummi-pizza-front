@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -50,6 +51,7 @@ const useStyles = makeStyles(theme => ({
 const ShoppingCartDialog = ({ open, handleToggle }) => {
   const { authenticatedUser } = useContext(AuthContext)
   const classes = useStyles()
+  const history = useHistory()
 
   const _totalPrice = authenticatedUser ? totalPrice(authenticatedUser.shoppingCart) : 0
 
@@ -114,7 +116,17 @@ const ShoppingCartDialog = ({ open, handleToggle }) => {
           {
             authenticatedUser
               ? authenticatedUser.shoppingCart.length > 0
-                ? <Button variant="contained" color="primary">Check Out</Button>
+                ? <Button
+                    variant="contained"
+                    color="primary"
+                    to="/order"
+                    onClick={() => {
+                      handleToggle()
+                      history.push('/order')
+                    }}
+                  >
+                    Check Out
+                  </Button>
                 : null
               : null
           }
