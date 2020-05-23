@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { AuthContext } from '../../../contexts/AuthContext'
 import pizzaClipArt from '../../../images/pizza-clipart-2.png'
+import { totalPrice } from '../../../utils/functions'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -50,18 +51,7 @@ const ShoppingCartDialog = ({ open, handleToggle }) => {
   const { authenticatedUser } = useContext(AuthContext)
   const classes = useStyles()
 
-  const totalPrice = () => {
-    let returningPrice = 0
-
-    if (authenticatedUser) {
-      authenticatedUser.shoppingCart.forEach(item => {
-        console.log(item.pizza.price * item.pizza_quantity)
-        returningPrice += item.pizza.price * item.pizza_quantity
-      })
-    }
-
-    return returningPrice
-  }
+  const _totalPrice = authenticatedUser ? totalPrice(authenticatedUser.shoppingCart) : 0
 
   return (
     <Dialog open={open} onClose={handleToggle} scroll='paper'>
@@ -113,7 +103,7 @@ const ShoppingCartDialog = ({ open, handleToggle }) => {
             ? <div className="total-price">
                 <Typography variant="subtitle1">Total Price</Typography>
                 <Typography variant="h6">
-                  {`$${totalPrice().toFixed(2)} / £${(totalPrice() * 0.91).toFixed(2)}`}
+                  {`$${_totalPrice.toFixed(2)} / £${(_totalPrice * 0.91).toFixed(2)}`}
                 </Typography>
               </div>
             : null
