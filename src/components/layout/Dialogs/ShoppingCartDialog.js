@@ -52,7 +52,6 @@ const ShoppingCartDialog = ({ open, handleToggle }) => {
   const { authenticatedUser } = useContext(AuthContext)
   const classes = useStyles()
   const history = useHistory()
-
   const _totalPrice = authenticatedUser ? totalPrice(authenticatedUser.shoppingCart) : 0
 
   return (

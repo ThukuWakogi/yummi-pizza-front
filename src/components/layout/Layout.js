@@ -13,7 +13,7 @@ import ProgressComponent from './ProgressComponent'
 const useStyles = makeStyles(theme => ({
   container: {
     marginTop: theme.spacing(3),
-    height: '100%'
+    height: '89%'
   }
 }))
 
