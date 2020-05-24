@@ -6,6 +6,7 @@ import Layout from './components/layout/Layout'
 import AuthContextProvider from './contexts/AuthContext'
 import PizzasContextProvider from './contexts/PizzasContext'
 import ShoppingCartContextProvider from './contexts/ShoppingCartContext'
+import OrderContextProvider from './contexts/OrderContext'
 
 const useStyles = makeStyles(theme => ({
   app: {
@@ -20,10 +21,12 @@ function App() {
     <div className={clsx('App', classes.app)}>
       <AuthContextProvider>
         <PizzasContextProvider>
-          <ShoppingCartContextProvider>
-            <CssBaseline />
-            <Layout />
-          </ShoppingCartContextProvider>
+          <OrderContextProvider>
+            <ShoppingCartContextProvider>
+              <CssBaseline />
+              <Layout />
+            </ShoppingCartContextProvider>
+          </OrderContextProvider>
         </PizzasContextProvider>
       </AuthContextProvider>
     </div>

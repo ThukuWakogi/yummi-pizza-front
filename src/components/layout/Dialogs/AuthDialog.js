@@ -22,7 +22,8 @@ import { AuthContext } from '../../../contexts/AuthContext'
 const useStyles = makeStyles(theme => {
   return {
     link: {
-      cursor: 'pointer'
+      cursor: 'pointer',
+      fontSize: '16px'
     },
     errorWarning: {
       color: theme.palette.error.main
@@ -233,6 +234,8 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
                 <Link
                   onClick={event => handleDialogAction(event, 'register', setErrors(null))}
                   className={classes.link}
+                  component="button"
+                  disabled={loggingIn || registering}
                 >
                   Register
                 </Link>
@@ -242,6 +245,8 @@ const AuthDialog = ({ authDialogOpen, handleToggle, authAction, handleDialogActi
                 <Link
                   onClick={event => handleDialogAction(event, 'login', setErrors(null))}
                   className={classes.link}
+                  component="button"
+                  disabled={loggingIn || registering}
                 >
                   Login
                 </Link>
