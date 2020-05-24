@@ -1,5 +1,6 @@
 import React, { Component, createContext } from 'react'
 import axios from 'axios'
+import { apiUrl } from '../utils/variables'
 
 export const PizzasContext = createContext(null)
 
@@ -8,7 +9,14 @@ class PizzasContextProvider extends Component {
     let pizzas = null
 
     await axios
-      .get('/pizza')
+      .get(
+        `${apiUrl}/pizza`,
+        {
+          headers: {
+            Accept: 'application/json'
+          }
+        }
+      )
       .then(async res => {
         pizzas = res.data
       })

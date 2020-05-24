@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react';
 import axios from 'axios'
-import { localStorageTokenKey } from '../utils/variables'
+import { localStorageTokenKey, apiUrl } from '../utils/variables'
 import { handleCallbacks } from '../utils/functions'
 
 export const AuthContext = createContext(null);
@@ -24,7 +24,15 @@ class AuthContextProvider extends Component {
       loggingIn: true
     })
     axios
-      .post('/login', { email, password })
+      .post(
+        `${apiUrl}/login`,
+        { email, password },
+        {
+          headers: {
+            Accept: 'application/json'
+          }
+        }
+      )
       .then(res => {
         localStorage.setItem(localStorageTokenKey, res.data.access_token)
         this.setState({
@@ -54,7 +62,15 @@ class AuthContextProvider extends Component {
       registering: true
     })
     axios
-      .post('/register', { name, email, password })
+      .post(
+        `${apiUrl}/register`,
+        { name, email, password },
+        {
+          headers: {
+            Accept: 'application/json'
+          }
+        }
+      )
       .then(res => {
         localStorage.setItem(localStorageTokenKey, res.data.access_token)
         this.setState({
@@ -78,10 +94,11 @@ class AuthContextProvider extends Component {
   fetchAuthenticatedUser = () => {
     axios
       .get(
-        '/udft',
+        `${apiUrl}/udft`,
         {
           headers: {
-            Authorization: `bearer ${localStorage.getItem(localStorageTokenKey)}`
+            Authorization: `bearer ${localStorage.getItem(localStorageTokenKey)}`,
+            Accept: 'application/json'
           }
         }
       )

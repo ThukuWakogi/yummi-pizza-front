@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react'
 import axios from 'axios'
-import { localStorageTokenKey } from '../utils/variables'
+import { localStorageTokenKey, apiUrl } from '../utils/variables'
 import { handleCallbacks } from '../utils/functions'
 
 export const ShoppingCartContext = createContext(null)
@@ -29,11 +29,12 @@ class ShoppingCartContextProvider extends Component {
     })
     axios
       .post(
-        '/shopping-cart-item',
+        `${apiUrl}/shopping-cart-item`,
         { pizza_id, pizza_quantity },
         {
           headers: {
-            Authorization: `bearer ${localStorage.getItem(localStorageTokenKey)}`
+            Authorization: `bearer ${localStorage.getItem(localStorageTokenKey)}`,
+            Accept: 'application/json'
           }
         }
       )
