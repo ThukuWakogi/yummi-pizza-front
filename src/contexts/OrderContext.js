@@ -1,7 +1,7 @@
 import React, { Component, createContext } from 'react'
 import axios from 'axios'
 import { handleCallbacks } from '../utils/functions'
-import { localStorageTokenKey } from '../utils/variables'
+import { localStorageTokenKey, apiUrl } from '../utils/variables'
 
 export const OrderContext = createContext(null)
 
@@ -16,11 +16,12 @@ class OrderContextProvider extends Component {
     })
     axios
       .put(
-        `/order/${orderId}`,
+        `${apiUrl}/order/${orderId}`,
         { checked_out: 1 },
         {
           headers: {
-            Authorization: `bearer ${localStorage.getItem(localStorageTokenKey)}`
+            Authorization: `bearer ${localStorage.getItem(localStorageTokenKey)}`,
+            Accept: 'application/json'
           }
         }
       )
